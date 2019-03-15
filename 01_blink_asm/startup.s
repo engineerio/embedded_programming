@@ -8,10 +8,10 @@
 .global interupt_vector
 interupt_vector:
     /* ARM Core System Handler Vectors */
-    .word   _stack_top          @ Stack Pointer
-    .word   Power_On_Reset      @ Reset
-    .word   Default_Trap        @ NMI
-    .word   Default_Trap        @ Hard Fault
+    .word   _stack_top      @ Stack Pointer
+    .word   Power_On_Reset  @ Reset
+    .word   hang_loop       @ NMI
+    .word   hang_loop       @ Hard Fault
     .word   0                   @ reserved
     .word   0                   @ reserved
     .word   0                   @ reserved
@@ -19,54 +19,67 @@ interupt_vector:
     .word   0                   @ reserved
     .word   0                   @ reserved
     .word   0                   @ reserved
-    .word   Default_Trap        @ SV Call
+    .word   hang_loop       @ SV Call
     .word   0                   @ reserved
     .word   0                   @ reserved
-    .word   Default_Trap        @ SRV Pending
-    .word   Default_Trap        @ SysTick
+    .word   hang_loop       @ SRV Pending
+    .word   hang_loop       @ SysTick
     /* Non-Core Vectors */
-    .word   Default_Trap        @ DMA ch 0, 4
-    .word   Default_Trap        @ DMA ch 1, 5
-    .word   Default_Trap        @ DMA ch 2, 6
-    .word   Default_Trap        @ DMA ch 3, 7
-    .word   Default_Trap        @ DMA errors
-    .word   Default_Trap        @ FTFA
-    .word   Default_Trap        @ PMC
-    .word   Default_Trap        @ LLWU
-    .word   Default_Trap        @ I2C0
+    .word   hang_loop       @ DMA ch 0, 4
+    .word   hang_loop       @ DMA ch 1, 5
+    .word   hang_loop       @ DMA ch 2, 6
+    .word   hang_loop       @ DMA ch 3, 7
+    .word   hang_loop       @ DMA errors
+    .word   hang_loop       @ FTFA
+    .word   hang_loop       @ PMC
+    .word   hang_loop       @ LLWU
+    .word   hang_loop       @ I2C0
     .word   0                   @ reserved
-    .word   Default_Trap        @ SPI0
+    .word   hang_loop       @ SPI0
     .word   0                   @ reserved
-    .word   Default_Trap        @ UART0
-    .word   Default_Trap        @ UART1
-    .word   Default_Trap        @ FlexCAN0
-    .word   Default_Trap        @ ADC0
-    .word   Default_Trap        @ ADC0
-    .word   Default_Trap        @ FTM0
-    .word   Default_Trap        @ FTM1
-    .word   Default_Trap        @ FTM2
-    .word   Default_Trap        @ CMP0
-    .word   Default_Trap        @ CMP1
-    .word   Default_Trap        @ FTM3
-    .word   Default_Trap        @ WDOG/EWM
-    .word   Default_Trap        @ FTM4
-    .word   Default_Trap        @ DAC0
-    .word   Default_Trap        @ FTM5
-    .word   Default_Trap        @ MCG
-    .word   Default_Trap        @ LPTMR0
-    .word   Default_Trap        @ PDB0, PDB1
-    .word   Default_Trap        @ PORT A
-    .word   Default_Trap        @ PORT B, C, D, E
+    .word   hang_loop       @ UART0
+    .word   hang_loop       @ UART1
+    .word   hang_loop       @ FlexCAN0
+    .word   hang_loop       @ ADC0
+    .word   hang_loop       @ ADC0
+    .word   hang_loop       @ FTM0
+    .word   hang_loop       @ FTM1
+    .word   hang_loop       @ FTM2
+    .word   hang_loop       @ CMP0
+    .word   hang_loop       @ CMP1
+    .word   hang_loop       @ FTM3
+    .word   hang_loop       @ WDOG/EWM
+    .word   hang_loop       @ FTM4
+    .word   hang_loop       @ DAC0
+    .word   hang_loop       @ FTM5
+    .word   hang_loop       @ MCG
+    .word   hang_loop       @ LPTMR0
+    .word   hang_loop       @ PDB0, PDB1
+    .word   hang_loop       @ PORT A
+    .word   hang_loop       @ PORT B, C, D, E
 
-.align 1
+.align 4
 .text
 
+    .macro irq_hang index
+    movs    r0, \index
+    ldr     r1, hang_loop
+    bx      r1
+    .endm
+
     .thumb_func
-    .type Default_Trap, %function
-Default_Trap:
-    .weak Default_Trap
+    .type hang_loop, %function
+hang_loop:
     nop
-    b       Default_Trap
+    b       hang_loop
+
+
+    .thumb_func
+    .type wdog_hang, %function
+wdog_hang:
+    irq_hang #39
+    
+
 @   Start of code execution
 @   Make sure to include "ENTRY(Power_On_Reset)" in the linker script
 @   This function should also be referenced by the static NVIC reset handler
