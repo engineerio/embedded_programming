@@ -1,6 +1,5 @@
 .syntax unified
 .arch armv6-m
-.thumb
 
 .align 2
 .section .interupt_vector, "a"
@@ -60,10 +59,11 @@ interupt_vector:
 
 .align 4
 .text
+.thumb
 
     .macro irq_hang index
     movs    r0, \index
-    ldr     r1, hang_loop
+    ldr     r1, =hang_loop
     bx      r1
     .endm
 
@@ -78,7 +78,7 @@ hang_loop:
     .type wdog_hang, %function
 wdog_hang:
     irq_hang #39
-    
+
 
 @   Start of code execution
 @   Make sure to include "ENTRY(Power_On_Reset)" in the linker script
@@ -89,17 +89,20 @@ wdog_hang:
     .global Power_On_Reset
     .type Power_On_Reset, %function
 Power_On_Reset:
-    cpsid   i           @ disable all interupts durin startup
+    cpsid   i                   @ disable all interupts durin startup
     .extern interupt_vector
-    ldr     r1, =interupt_vector
-    ldr     r0, [r1]    @ copy stack pointer from NVIC to SP register
-    msr     msp, r0
-    .equ    wdog_addr, 0x40052000
-    ldr     r1, =wdog_addr
-    ldrh    r2, [r1]        @ read WDOG_STCTRLH
-    movs    r0, #1
-    bics    r2, r0
-    strh    r2, [r1]        @ write WDOG_STCTRLH
+
+
+/* Disable Watchdog Timer */
+wdog_disble:
+    ldr	    r1, =0x40052000     @ Watchdog base address
+	ldr	    r0, =0xC520         @ Watchdog unlock key 1
+	strh	r0, [r1, #14]
+	ldr	    r0, =0xD928         @ Watchdog unlock key 2
+	strh	r0, [r1, #14]
+    ldr     r0, =0x01D0         @ Watchdog disable
+    strh    r0, [r1]            @ write WDOG_STCTRLH
+
 
 /* Clear BSS section */
 bss_init:
