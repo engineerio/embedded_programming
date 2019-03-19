@@ -69,7 +69,7 @@ init:
 .type main, %function
 main:
     @ Initialize and enable the SysTick timer
-    bx      systick_init
+    bl      systick_init
 .wait_loop:
     wfi
     b       .wait_loop
