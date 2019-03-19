@@ -27,7 +27,7 @@
     .thumb
     .text
 
-    .equ startup_clock, #20971520   @ Frequency of system clock at reset
+    .equ startup_clock, 20971520   @ Frequency of system clock at reset
 
 /* Initialize the SysTick timer module and set the interrupt period */
     .thumb_func
@@ -55,9 +55,9 @@ systick_init:
 
 /* SysTick Interrupt Service Routine */
     .thumb_func
-    .global systic_isr
-    .type systic_isr, %function
-systic_isr:
+    .global systick_isr
+    .type systick_isr, %function
+systick_isr:
     push    {r0, r1, lr}
     movs    r0, #1
     lsls    r0, #29

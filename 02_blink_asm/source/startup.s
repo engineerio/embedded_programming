@@ -44,7 +44,7 @@ interupt_vector:
     .word   0                   @ reserved
     .word   0                   @ reserved
     .word   hang_loop           @ SRV Pending
-    .word   hang_loop           @ SysTick
+    .word   systick_isr         @ SysTick
     /* Non-Core Vectors */
     .word   hang_loop           @ DMA ch 0, 4
     .word   hang_loop           @ DMA ch 1, 5
