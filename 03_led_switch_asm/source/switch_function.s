@@ -33,7 +33,7 @@
 sw2_init:
     @ Enable clock gating to PORT B
     ldr     r1, =0x40048038     @ SIM_SCGC5
-    mov     r0, #1
+    movs    r0, #1
     lsls    r0, #10
     ldr     r2, [r1]
     orrs    r2, r0
@@ -46,7 +46,7 @@ sw2_init:
 
     @ Configure SW2 as an input
     ldr     r1, =0x400FF040     @ GPIO_B register
-    mov     r0, #1
+    movs    r0, #1
     ldr     r2, [r1, 0x14]
     bics    r2, r0
     str     r2, [r1, 0x14]
@@ -56,10 +56,10 @@ sw2_init:
     .thumb_func
     .global sw3_init
     .type sw3_init, %function
-sw2_init:
+sw3_init:
     @ Enable clock gating to PORT B
     ldr     r1, =0x40048038     @ SIM_SCGC5
-    mov     r0, #1
+    movs    r0, #1
     lsls    r0, #9
     ldr     r2, [r1]
     orrs    r2, r0
@@ -72,7 +72,7 @@ sw2_init:
 
     @ Configure SW2 as an input
     ldr     r1, =0x400FF000     @ GPIO_A register
-    mov     r0, =1 << 4
+    movs    r0, 1 << 4
     ldr     r2, [r1, 0x14]
     bics    r2, r0
     str     r2, [r1, 0x14]
@@ -83,10 +83,47 @@ sw2_init:
     .global port_a_isr
     .type port_a_isr, %function
 port_a_isr:
+/*
+Interrupt will be triggered by a falling edge on Switch #3
+This function will change to the next LED in the R->G->B sequence
+*/
+    push    {r0, r1, r2, r3, lr}
 
+    ldr     r1, =led_state   @ Pointer to LED State Var Object
+    ldr     r2, [r1, #4]    @ Pointer to current RGB state
+    ldr     r3, [r2, #12]   @ Pointer to next RGB state
+    str     r3, [r1, #4]    @ Set next RGB state as current state
+
+    @ Turn on new LED
+    ldr     r1, [r3, #4]    @ GPIO port address
+    ldr     r0, [r3, #8]    @ GPIO pin number
+    str     r0, [r1, #8]    @ Set output low to turn on LED
+
+    @ Turn off old LED
+    ldr     r1, [r2, #4]    @ GPIO port address
+    ldr     r0, [r2, #8]    @ GPIO pin number
+    str     r0, [r1, #4]    @ Set output high to turn off LED
+         
+    @ Return
+    pop     {r0, r1, r2, r3, pc}
 
 
     .thumb_func
     .global port_bcde_isr
     .type port_bcde_isr, %function
 port_bcde_isr:
+/*
+Interrupt will be triggered by a falling edge on Switch #2
+This function will change the flashing state variable 
+*/
+    push    {r0, r1, lr}
+
+    ldr     r1, =led_state   @ Pointer to LED State Var Object
+    ldr     r0, [r1, #0]    @ LED flash state variable
+    mvns    r0, r0          @ Inverse of r0
+    str     r0, [r1, #0]    @ Toggle the LED flash state
+
+    @ Return
+    pop     {r0, r1, pc}
+
+    .end
