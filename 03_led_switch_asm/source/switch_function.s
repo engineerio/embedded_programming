@@ -50,7 +50,7 @@ sw2_init:
     ldr     r2, [r1, 0x14]
     bics    r2, r0
     str     r2, [r1, 0x14]
-
+    bx      lr
 
 /* Initialize switch #3 */
     .thumb_func
@@ -76,7 +76,7 @@ sw3_init:
     ldr     r2, [r1, 0x14]
     bics    r2, r0
     str     r2, [r1, 0x14]
-
+    bx      lr
 
 
     .thumb_func
@@ -87,25 +87,28 @@ port_a_isr:
 Interrupt will be triggered by a falling edge on Switch #3
 This function will change to the next LED in the R->G->B sequence
 */
-    push    {r0, r1, r2, r3, lr}
+    push    {r0-r3, lr}
 
-    ldr     r1, =led_state   @ Pointer to LED State Var Object
-    ldr     r2, [r1, #4]    @ Pointer to current RGB state
-    ldr     r3, [r2, #12]   @ Pointer to next RGB state
-    str     r3, [r1, #4]    @ Set next RGB state as current state
-
-    @ Turn on new LED
-    ldr     r1, [r3, #4]    @ GPIO port address
-    ldr     r0, [r3, #8]    @ GPIO pin number
-    str     r0, [r1, #8]    @ Set output low to turn on LED
+    ldr     r3, =led_state  @ Pointer to LED State Var Object
+    ldr     r0, [r3, #4]    @ Pointer to current RGB state
+    ldm     r0, {r0-r2}     @ Pointer to next RGB state
+    str     r2, [r3, #4]    @ Set next RGB state as current state
 
     @ Turn off old LED
-    ldr     r1, [r2, #4]    @ GPIO port address
-    ldr     r0, [r2, #8]    @ GPIO pin number
-    str     r0, [r1, #4]    @ Set output high to turn off LED
-         
+    str     r1, [r0, #4]    @ Set output high to turn off LED
+    
+    @ Turn on new LED
+    ldr     r0, [r3, #4]    @ GPIO port address
+    ldm     r0, {r0, r1}    @ GPIO pin number
+    str     r1, [r0, #8]    @ Set output low to turn on LED
+
+    @ Clear the interrupt flag
+    ldr     r1, =0x40049000     @ PORT_A
+    ldr     r0, [r1, 0x10]
+    str     r0, [r1, 0x10]
+
     @ Return
-    pop     {r0, r1, r2, r3, pc}
+    pop     {r0-r3, pc}
 
 
     .thumb_func
@@ -116,14 +119,19 @@ port_bcde_isr:
 Interrupt will be triggered by a falling edge on Switch #2
 This function will change the flashing state variable 
 */
-    push    {r0, r1, lr}
+    push    {r0-r1, lr}
 
-    ldr     r1, =led_state   @ Pointer to LED State Var Object
+    ldr     r1, =led_state  @ Pointer to LED State Var Object
     ldr     r0, [r1, #0]    @ LED flash state variable
-    mvns    r0, r0          @ Inverse of r0
+    mvns    r0, r0          @ Bitwise NOT r0
     str     r0, [r1, #0]    @ Toggle the LED flash state
 
+    @ Clear the interrupt flag
+    ldr     r1, =0x4004A000     @ PORT_B
+    ldr     r0, [r1]
+    str     r0, [r1]
+
     @ Return
-    pop     {r0, r1, pc}
+    pop     {r0-r1, pc}
 
     .end

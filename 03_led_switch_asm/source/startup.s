@@ -76,8 +76,8 @@ interupt_vector:
     .word   hang_loop           @ MCG
     .word   hang_loop           @ LPTMR0
     .word   hang_loop           @ PDB0, PDB1
-    .word   hang_loop           @ PORT A
-    .word   hang_loop           @ PORT B, C, D, E
+    .word   port_a_isr          @ PORT A
+    .word   port_bcde_isr       @ PORT B, C, D, E
 
 /* Flash Configuration */
     .align 2
@@ -155,8 +155,8 @@ data_init:
     ble     .data_init_end
 .data_move_loop:
     subs    r3, #4
-    ldr     r0, [r2, r3]
-    str     r0, [r1, r3]
+    ldr     r0, [r1, r3]
+    str     r0, [r2, r3]
     bgt     .data_move_loop
 .data_init_end:
 

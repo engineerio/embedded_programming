@@ -29,7 +29,6 @@
     .global red_led
     .type red_led, %object
 red_led:
-    .word   0x4004C000  @ Port D Address
     .word   0x400FF0C0  @ GPIO D Address
     .word   1 << 6      @ Pin Number
     .word   green_led   @ Next
@@ -37,7 +36,6 @@ red_led:
     .global green_led
     .type green_led, %object
 green_led:
-    .word   0x4004D000  @ Port E Address
     .word   0x400FF100  @ GPIO E Address
     .word   1 << 29     @ Pin Number
     .word   blue_led    @ Next
@@ -45,7 +43,6 @@ green_led:
     .global blue_led
     .type blue_led, %object
 blue_led:
-    .word   0x4004D000  @ Port E Address
     .word   0x400FF100  @ GPIO E Address
     .word   1 << 25     @ Pin Number
     .word   red_led     @ Next

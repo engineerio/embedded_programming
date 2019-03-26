@@ -43,7 +43,7 @@ systick_init:
 
     @ Only run the init function at the start of program execution
     ldr     r1, =0xE000E010             @ SysTick base address
-    ldr     r0, =startup_clock / 4 - 1  @ 4 Hz frequency
+    ldr     r0, =startup_clock / 4 - 1  @ 2 Hz frequency
     str     r0, [r1, #4]                @ Write reload value
     str     r0, [r1, #8]                @ Clear SysTick counter by writing any value
 
@@ -58,9 +58,18 @@ systick_init:
     .global systick_isr
     .type systick_isr, %function
 systick_isr:
-    push    {r0, r1, lr}
-    movs    r0, #1
-    lsls    r0, #29
-    ldr     r1, =GPIO_E
-    str     r0, [r1, 0xC]   @ PTOR write
-    pop     {r0, r1, pc}
+    push    {r0-r2, lr}
+    ldr     r0, =led_state
+    ldm     r0, {r0, r1}
+    ldm     r1, {r1, r2}
+    @ If the flash state variable is not 0, flash the led
+    cmp     r0, #0
+    bpl     .led_on
+.led_toggle:
+    str     r2, [r1, 0xC]   @ PTOR write
+    pop     {r0, r1, r2, pc}
+.led_on:
+    str     r2, [r1, 0x8]   @ PCOR write
+    pop     {r0-r2, pc}
+
+    .end

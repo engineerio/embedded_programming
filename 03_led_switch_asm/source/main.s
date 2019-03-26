@@ -27,48 +27,76 @@
 
 .text
 
-.thumb_func
-.global init
-.type startup, %function
+    .thumb_func
+    .global init
+    .type startup, %function
 init:
-    @ enable clock gating for PORT E
-    .equ SIM_SCGC5, (0x40047000 + 0x1038)
-    ldr     r1, =SIM_SCGC5
-    movs    r0, #1
-    lsls    r0, #13
+    @ enable clock gating for PORTs D and E
+    ldr     r1, =0x40048038     @ SIM_SCGC5
+    movs    r0, #3
+    lsls    r0, #12
     ldr     r2, [r1]
     orrs    r2, r0
     str     r2, [r1]
 
-    @ set pin E29 as a GPIO
-    .equ PORT_E, 0x4004D000
-    ldr     r1, =PORT_E
+
+
+    @ set pins D6, E25, and E29 as GPIO
     movs    r0, #7
     lsls    r0, #8      @ mask for mux field
     movs    r3, #1
     lsls    r3, #8      @ GPIO mux option
+    
+    ldr     r1, =0x4004C000     @ PORT_E
+    @ D6
+    ldr     r2, [r1, 0x18]
+    bics    r2, r0
+    orrs    r2, r3
+    str     r2, [r1, 0x18]
+    
+    ldr     r1, =0x4004D000     @ PORT_E
+    @ E25
+    ldr     r2, [r1, 0x64]
+    bics    r2, r0
+    orrs    r2, r3
+    str     r2, [r1, 0x64]
+    @ E29
     ldr     r2, [r1, 0x74]
     bics    r2, r0
     orrs    r2, r3
     str     r2, [r1, 0x74]
 
-    @ configure GPIO E pin 29 as output and set high (LED off)
-    .equ GPIO_E, 0x400FF100
-    .global GPIO_E
-    ldr     r1, =GPIO_E
-    movs    r0, #1
-    lsls    r0, #29
+    @ configure GPIO D pin 6 as output and set high (LED off)
+    ldr     r1, =0x400FF0C0
+    movs    r0, 1 << 6
     ldr     r2, [r1, 0x14]  @ PDDR read
     orrs    r2, r0
     str     r2, [r1, 0x14]  @ PDDR write
-    str     r0, [r1, 0x8]   @ PCOR write
-    bx      lr
+    str     r0, [r1, 0x4]   @ PSOR write
+
+    @ configure GPIO E pins 25 and 29 as output and set high (LED off)
+    ldr     r1, =0x400FF100
+    movs    r0, #34
+    lsls    r0, #24
+    ldr     r2, [r1, 0x14]  @ PDDR read
+    orrs    r2, r0
+    str     r2, [r1, 0x14]  @ PDDR write
+    str     r0, [r1, 0x4]   @ PSOR write
     
+    @ Return from init
+    bx      lr
 
 .thumb_func
 .global main
 .type main, %function
 main:
+    @ Initialize switches
+    bl      sw2_init
+    bl      sw3_init
+    ldr     r1, =0xE000E100
+    movs    r0, 0xC
+    lsls    r0, #28
+    str     r0, [r1]
     @ Initialize and enable the SysTick timer
     bl      systick_init
 .wait_loop:

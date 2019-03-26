@@ -59,8 +59,8 @@ MEMORY
 {
   m_interrupts          (RX)  : ORIGIN = 0x00000000, LENGTH = 0x00000200
   m_flash_config        (RX)  : ORIGIN = 0x00000400, LENGTH = 0x00000010
-  m_text                (RX)  : ORIGIN = 0x00000410, LENGTH = 0x0001FBF0
-  m_data                (RW)  : ORIGIN = 0x1FFFF000, LENGTH = 0x00004000
+  flash                 (RX)  : ORIGIN = 0x00000410, LENGTH = 0x0001FBF0
+  ram                   (RW)  : ORIGIN = 0x1FFFF000, LENGTH = 0x00004000
 }
 
 /* Define output sections */
@@ -95,82 +95,25 @@ SECTIONS
     KEEP (*(.init))
     KEEP (*(.fini))
     . = ALIGN(4);
-  } > m_text
+  } > flash 
 
   .ARM.extab :
   {
     *(.ARM.extab* .gnu.linkonce.armextab.*)
-  } > m_text
+  } > flash 
 
   .ARM :
   {
     __exidx_start = .;
     *(.ARM.exidx*)
     __exidx_end = .;
-  } > m_text
+  } > flash 
 
- .ctors :
-  {
-    __CTOR_LIST__ = .;
-    /* gcc uses crtbegin.o to find the start of
-       the constructors, so we make sure it is
-       first.  Because this is a wildcard, it
-       doesn't matter if the user does not
-       actually link against crtbegin.o; the
-       linker won't look for a file to match a
-       wildcard.  The wildcard also means that it
-       doesn't matter which directory crtbegin.o
-       is in.  */
-    KEEP (*crtbegin.o(.ctors))
-    KEEP (*crtbegin?.o(.ctors))
-    /* We don't want to include the .ctor section from
-       from the crtend.o file until after the sorted ctors.
-       The .ctor section from the crtend file contains the
-       end of ctors marker and it must be last */
-    KEEP (*(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors))
-    KEEP (*(SORT(.ctors.*)))
-    KEEP (*(.ctors))
-    __CTOR_END__ = .;
-  } > m_text
-
-  .dtors :
-  {
-    __DTOR_LIST__ = .;
-    KEEP (*crtbegin.o(.dtors))
-    KEEP (*crtbegin?.o(.dtors))
-    KEEP (*(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors))
-    KEEP (*(SORT(.dtors.*)))
-    KEEP (*(.dtors))
-    __DTOR_END__ = .;
-  } > m_text
-
-  .preinit_array :
-  {
-    PROVIDE_HIDDEN (__preinit_array_start = .);
-    KEEP (*(.preinit_array*))
-    PROVIDE_HIDDEN (__preinit_array_end = .);
-  } > m_text
-
-  .init_array :
-  {
-    PROVIDE_HIDDEN (__init_array_start = .);
-    KEEP (*(SORT(.init_array.*)))
-    KEEP (*(.init_array*))
-    PROVIDE_HIDDEN (__init_array_end = .);
-  } > m_text
-
-  .fini_array :
-  {
-    PROVIDE_HIDDEN (__fini_array_start = .);
-    KEEP (*(SORT(.fini_array.*)))
-    KEEP (*(.fini_array*))
-    PROVIDE_HIDDEN (__fini_array_end = .);
-  } > m_text
 
   __etext = .;    /* define a global symbol at end of code */
   __DATA_ROM = .; /* Symbol is used by startup for data initialization */
 
-  /* reserve MTB memory at the beginning of m_data */
+  /* reserve MTB memory at the beginning of ram    */
   .mtb : /* MTB buffer address as defined by the hardware */
   {
     . = ALIGN(8);
@@ -178,7 +121,14 @@ SECTIONS
     KEEP(*(.mtb_buf)) /* need to KEEP Micro Trace Buffer as not referenced by application */
     . = ALIGN(8);
     _mtb_end = .;
-  } > m_data
+  } > ram   
+
+  .stack :
+  {
+    . = ALIGN(8);
+    . += STACK_SIZE;
+    _stack_top = .;
+  } > ram   
 
   .data :
   {
@@ -190,11 +140,11 @@ SECTIONS
     KEEP(*(.jcr*))
     . = ALIGN(4);
     _data_end = .;        /* define a global symbol at data end */
-  } > m_data AT> m_data
+  } >ram AT>flash
 
   __DATA_END = __DATA_ROM + (_data_end - _data_start);
-  text_end = ORIGIN(m_text) + LENGTH(m_text);
-  ASSERT(__DATA_END <= text_end, "region m_text overflowed with text and data")
+  text_end = ORIGIN(flash ) + LENGTH(flash );
+  ASSERT(__DATA_END <= text_end, "region flash  overflowed with text and data")
 
   /* Uninitialized data section */
   .bss :
@@ -209,7 +159,7 @@ SECTIONS
     . = ALIGN(4);
     _bss_end = .;
     __END_BSS = .;
-  } > m_data
+  } > ram   
 
   .heap :
   {
@@ -220,22 +170,16 @@ SECTIONS
     . += HEAP_SIZE;
     __HeapLimit = .;
     __heap_limit = .; /* Add for _sbrk */
-  } > m_data
+  } > ram   
 
-  .stack :
-  {
-    . = ALIGN(8);
-    . += STACK_SIZE;
-    _stack_top = .;
-  } > m_data
 
   /* Initializes stack on the end of block */
-  __StackTop   = ORIGIN(m_data) + LENGTH(m_data);
+  __StackTop   = ORIGIN(ram   ) + LENGTH(ram   );
   __StackLimit = __StackTop - STACK_SIZE;
   PROVIDE(__stack = __StackTop);
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
 
-  ASSERT(__StackLimit >= __HeapLimit, "region m_data overflowed with stack and heap")
+  ASSERT(__StackLimit >= __HeapLimit, "region ram    overflowed with stack and heap")
 }
 
