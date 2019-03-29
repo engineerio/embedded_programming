@@ -1,0 +1,282 @@
+adalib/
+    a-assert.ali
+    a-elchha.ali
+    a-except.ali
+    a-exetim.ali
+    a-extiin.ali
+    a-interr.ali
+    a-intnam.ali
+    a-reatim.ali
+    a-retide.ali
+    a-rttiev.ali
+    a-sytaco.ali
+    a-tags.ali
+    a-taside.ali
+    a-taster.ali
+    a-textio.ali
+    a-unccon.ali
+    a-uncdea.ali
+    ada.ali
+    g-io.ali
+    g-souinf.ali
+    gnat.ali
+    i-c.ali
+    i-cexten.ali
+    i-stm32-flash.ali
+    i-stm32-gpio.ali
+    i-stm32-pwr.ali
+    i-stm32-rcc.ali
+    i-stm32-syscfg.ali
+    i-stm32-usart.ali
+    i-stm32.ali
+    interfac.ali
+    libgnarl.a
+    libgnat.a
+    machcode.ali
+    s-assert.ali
+    s-atacco.ali
+    s-bb.ali
+    s-bbbopa.ali
+    s-bbbosu.ali
+    s-bbcppr.ali
+    s-bbcpsp.ali
+    s-bbexti.ali
+    s-bbinte.ali
+    s-bbmcpa.ali
+    s-bbpara.ali
+    s-bbprot.ali
+    s-bbthqu.ali
+    s-bbthre.ali
+    s-bbtiev.ali
+    s-bbtime.ali
+    s-bcpcst.ali
+    s-bcprmu.ali
+    s-fatflt.ali
+    s-fatgen.ali
+    s-fatlfl.ali
+    s-fatllf.ali
+    s-fatsfl.ali
+    s-imenne.ali
+    s-imgboo.ali
+    s-imgint.ali
+    s-imglli.ali
+    s-imgllu.ali
+    s-imguns.ali
+    s-interr.ali
+    s-maccod.ali
+    s-macres.ali
+    s-memcom.ali
+    s-memcop.ali
+    s-memmov.ali
+    s-memory.ali
+    s-memset.ali
+    s-memtyp.ali
+    s-mufalo.ali
+    s-multip.ali
+    s-musplo.ali
+    s-osinte.ali
+    s-parame.ali
+    s-secsta.ali
+    s-semiho.ali
+    s-sssita.ali
+    s-stm32.ali
+    s-stoele.ali
+    s-taprob.ali
+    s-taprop.ali
+    s-tarest.ali
+    s-tasdeb.ali
+    s-tasinf.ali
+    s-taskin.ali
+    s-taspri.ali
+    s-tasres.ali
+    s-textio.ali
+    s-tpobmu.ali
+    s-tposen.ali
+    s-unstyp.ali
+    setup_pll.ali
+    system.ali
+    text_io.ali
+    unchconv.ali
+    unchdeal.ali
+ada_object_path
+ada_source_path
+gnarl/
+    a-exetim.adb        rts-sources/gnarl/common
+    a-exetim.ads        rts-sources/gnarl/common
+    a-extiin.adb        rts-sources/gnarl/common
+    a-extiin.ads        rts-sources/gnarl/common
+    a-interr.adb        rts-sources/gnarl/common
+    a-interr.ads        rts-sources/gnarl/common
+    a-intnam.ads
+    a-reatim.adb        rts-sources/gnarl/common
+    a-reatim.ads        rts-sources/gnarl/common
+    a-retide.adb        rts-sources/gnarl/common
+    a-retide.ads        rts-sources/gnarl/common
+    a-rttiev.adb        rts-sources/gnarl/common
+    a-rttiev.ads        rts-sources/gnarl/common
+    a-sytaco.adb        rts-sources/gnarl/common
+    a-sytaco.ads        rts-sources/gnarl/common
+    a-taside.adb        rts-sources/gnarl/common
+    a-taside.ads        rts-sources/gnarl/common
+    a-taster.adb        rts-sources/gnarl/common
+    a-taster.ads        rts-sources/gnarl/common
+    handler.s
+    s-bbbosu.adb
+    s-bbbosu.ads        rts-sources/gnarl/[timer32 | timer64]
+    s-bbcppr.adb
+    s-bbcppr.ads
+    s-bbcpsp.ads
+    s-bbexti.adb        rts-sources/gnarl/common
+    s-bbexti.ads        rts-sources/gnarl/common
+    s-bbinte.adb
+    s-bbinte.ads        rts-sources/gnarl/common
+    s-bbprot.adb        rts-sources/gnarl/common
+    s-bbprot.ads        rts-sources/gnarl/common
+    s-bbsumu.adb
+    s-bbthqu.adb        rts-sources/gnarl/common
+    s-bbthqu.ads        rts-sources/gnarl/common
+    s-bbthre.adb        rts-sources/gnarl/common
+    s-bbthre.ads        rts-sources/gnarl/common
+    s-bbtiev.adb        rts-sources/gnarl/common
+    s-bbtiev.ads        rts-sources/gnarl/common
+    s-bbtime.adb        rts-sources/gnarl/[timer32 | timer64]
+    s-bbtime.ads        rts-sources/gnarl/common
+    s-bcpcst.adb
+    s-bcpcst.ads
+    s-bcprmu.adb        rts-sources/gnarl/common
+    s-bcprmu.ads        rts-sources/gnarl/common
+    s-interr.adb        rts-sources/gnarl/common
+    s-interr.ads        rts-sources/gnarl/common
+    s-mufalo.adb        rts-sources/gnarl/common
+    s-mufalo.ads        rts-sources/gnarl/common
+    s-multip.adb        rts-sources/gnarl/common
+    s-multip.ads        rts-sources/gnarl/common
+    s-musplo.adb        rts-sources/gnarl/[spinlock | spinlock-leon]
+    s-musplo.ads        rts-sources/gnarl/common
+    s-osinte.ads        rts-sources/gnarl/common
+    s-taprob.adb        rts-sources/gnarl/common
+    s-taprob.ads        rts-sources/gnarl/common
+    s-taprop.adb        rts-sources/gnarl/common
+    s-taprop.ads        rts-sources/gnarl/common
+    s-tarest.adb        rts-sources/gnarl/common
+    s-tarest.ads        rts-sources/gnarl/common
+    s-tasdeb.adb        rts-sources/gnarl/common
+    s-tasdeb.ads        rts-sources/gnarl/common
+    s-tasinf.adb        rts-sources/gnarl/common
+    s-tasinf.ads        rts-sources/gnarl/common
+    s-taskin.adb        rts-sources/gnarl/common
+    s-taskin.ads        rts-sources/gnarl/sfp
+    s-taspri.ads        rts-sources/gnarl/common
+    s-tasres.ads        rts-sources/gnarl/common
+    s-tpobmu.adb        rts-sources/gnarl/common
+    s-tpobmu.ads        rts-sources/gnarl/common
+    s-tposen.adb        rts-sources/gnarl/sfp
+    s-tposen.ads        rts-sources/gnarl/sfp
+gnat/
+    a-assert.adb        rts-sources/common
+    a-assert.ads        rts-sources/common
+    a-elchha.adb        rts-sources/[zfp | full]
+    a-elchha.ads        rts-sources/[zfp | full]
+    a-except.adb        rts-sources/[zfp | full]
+    a-except.ads        rts-sources/[zfp | full]
+    a-tags.adb          rts-sources/[zfp | full]
+    a-tags.ads          rts-sources/[zfp | full]
+    a-textio.adb        rts-sources/common
+    a-textio.ads        rts-sources/common
+    a-unccon.ads        rts-sources/common
+    a-uncdea.ads        rts-sources/common
+    ada.ads             rts-sources/common
+    breakpoint_handler-cortexm.s
+    g-io-put.adb        rts-sources/common
+    g-io.adb            rts-sources/common
+    g-io.ads            rts-sources/common
+    g-souinf.ads        rts-sources/common
+    gnat.ads            rts-sources/common
+    i-c.ads             rts-sources/[zfp | full]
+    i-cexten.ads        rts-sources/common
+    i-stm32-flash.ads
+    i-stm32-gpio.ads
+    i-stm32-pwr.ads
+    i-stm32-rcc.ads
+    i-stm32-syscfg.ads
+    i-stm32-usart.ads
+    i-stm32.ads
+    interfac.ads        rts-sources/common
+    machcode.ads        rts-sources/common
+    s-assert.adb        rts-sources/[zfp | full]
+    s-assert.ads        rts-sources/common
+    s-atacco.adb        rts-sources/common
+    s-atacco.ads        rts-sources/common
+    s-bb.ads            rts-sources/common
+    s-bbbopa.ads
+    s-bbmcpa.adb
+    s-bbmcpa.ads
+    s-bbpara.ads
+    s-fatflt.ads        rts-sources/fpu
+    s-fatgen.adb        rts-sources/fpu
+    s-fatgen.ads        rts-sources/fpu
+    s-fatlfl.ads        rts-sources/fpu
+    s-fatllf.ads        rts-sources/fpu
+    s-fatsfl.ads        rts-sources/fpu
+    s-imenne.adb        rts-sources/image/enum
+    s-imenne.ads        rts-sources/image/enum
+    s-imgboo.adb        rts-sources/common
+    s-imgboo.ads        rts-sources/common
+    s-imgint.adb        rts-sources/common
+    s-imgint.ads        rts-sources/common
+    s-imglli.adb        rts-sources/common
+    s-imglli.ads        rts-sources/common
+    s-imgllu.adb        rts-sources/common
+    s-imgllu.ads        rts-sources/common
+    s-imguns.adb        rts-sources/common
+    s-imguns.ads        rts-sources/common
+    s-maccod.ads        rts-sources/common
+    s-macres.adb
+    s-macres.ads        rts-sources/common
+    s-memcom.adb        rts-sources/mem
+    s-memcom.ads        rts-sources/mem
+    s-memcop.adb        rts-sources/mem
+    s-memcop.ads        rts-sources/mem
+    s-memmov.adb        rts-sources/mem
+    s-memmov.ads        rts-sources/mem
+    s-memory.adb        rts-sources/alloc/[full | tasking | no-taskin | no-cas]
+    s-memory.ads        rts-sources/[zfp | full]
+    s-memset.adb        rts-sources/mem
+    s-memset.ads        rts-sources/mem
+    s-memtyp.ads        rts-sources/mem
+    s-parame.adb        rts-sources/gnat/parameters/[small | large]
+    s-parame.ads        rts-sources/gnat/parameters/[zfp-small | zfp-large | small | large]
+    s-secsta.adb        rts-sources/common
+    s-secsta.ads        rts-sources/common
+    s-semiho.adb        rts-sources/semihosting
+    s-semiho.ads        rts-sources/semihosting
+    s-sssita.adb        rts-sources/zfp
+    s-sssita.ads        rts-sources/zfp
+    s-stm32.adb
+    s-stm32.ads
+    s-stoele.adb        rts-sources/common
+    s-stoele.ads        rts-sources/common
+    s-textio.adb        rts-sources/semihosting
+    s-textio.ads        rts-sources/common
+    s-unstyp.ads        rts-sources/common
+    setup_pll.adb
+    setup_pll.ads
+    start-common.s
+    start-ram.s
+    start-rom.s
+    system.ads
+    text_io.ads         rts-sources/common
+    unchconv.ads        rts-sources/common
+    unchdeal.ads        rts-sources/common
+ld/
+    common-RAM.ld
+    common-ROM.ld
+    memory-map.ld
+runtime.xml
+share/
+    gpr/
+        manifests/
+            install
+            libgnarl
+            libgnat
+target_properties
